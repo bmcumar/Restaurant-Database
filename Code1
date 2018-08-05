@@ -210,7 +210,7 @@ Insert Into Employee (fName, lName, position, branchNo, salary, gender)
 	;
 	
 // Insert data into Supplier
-e Restaurant;
+Use Restaurant;
 
 Insert Into Supplier(invoiceNo,restQuant,totalCost,delivery,orderDelivered)
 	Values
@@ -222,7 +222,10 @@ Insert Into Supplier(invoiceNo,restQuant,totalCost,delivery,orderDelivered)
 	('S005', '100', '350', '20180506', '1'),
 	('S006', '500', '650', '20180606', '0'),
 	('S007', '50', '150', '20180506', '1'),
-	('S008', '100', '300', '20180606', '0')
+	('S008', '100', '300', '20180606', '0'),
+	('S009', '100', '300', '20180506', '1'),
+	('S010', '200', '250', '20180506', '1'),
+	
 	;
 	
 	//Insert into Ingredients
@@ -239,7 +242,20 @@ Values
 	('N005', 'Onion', '100','S005','1'),
 	('N006', 'Chicken Patty', '500','S006', '0'),
 	('N007', 'Cheese', '50','S007', '1'),
-	('N008', 'Soda', '100', 'S008','0')
+	('N008', 'Soda', '100', 'S008','0'),
+	('N009', 'Milk', '100', 'S009','1'),
+	('N010', 'Strawberry', '200', 'S010','1')
+	;
+	
+	// Insert data into food
+	Insert Into Food(foodNo,foodName,ingredientNo,foodPrice,avail)
+
+Values
+	('B1', 'Cheeseburger', 'N002','7','1'),
+	('B2', 'Chicken Sandwich', 'N006','7','1'),
+	('B3', 'House Salad', 'N004','8','1'),
+	('D1','Soda', 'N008','2','1'),
+	('D2', 'Milkshake', 'N010','3','1')
 	;
 
 
