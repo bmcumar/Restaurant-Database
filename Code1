@@ -1,0 +1,178 @@
+# Restaurant-Database
+New Code repository for Restaurant database
+
+Website link for Database Creation in case you get stuck
+
+https://www.quackit.com/sql_server/sql_server_2017/tutorial/create_a_database_in_sql_server_2017.cfm
+
+
+//First paste this alone
+Create Database Restaurant;
+
+
+//Then do each table on its own
+
+Use Restaurant;
+
+Create Table Employee (
+	employeeNum int Identity(1,1) Not Null,
+	fName varchar (255) Not Null,
+	lName varchar (255) Not Null,
+	position varchar(50) Not Null,
+	branchNo varchar(5) Not Null,
+	salary money Not Null,
+	gender varchar(1) Not Null
+	);
+
+Create Table Branch (
+	branchNo varchar(5) Not Null,
+	city varchar(100) Not Null,
+	state varchar(100) Not Null,
+	phoneNo char (10) Not Null,
+	zipCode char (5) Not Null
+	);
+
+
+Create Table Customer(
+		paymentNo int Identity (1,1) Not Null,
+		paymentType varchar (50) Not Null,
+		foodNum char (2) Not Null,
+		cost money Not Null,
+		paymentDate date Not Null
+		);
+
+
+Create Table Food(
+	foodNum char (2) Not Null,
+	foodName varchar (50) Not Null,
+	ingredientNum varchar (4) Not Null,
+	foodPrice money Not Null,
+	avail bit Not Null
+	);
+
+	
+Create Table Ingredients(
+	ingredientNum varchar(4) Not Null,
+	ingredientName varchar (50) Not Null,
+	restQuant int Not Null,
+	supNum varchar (4) Not Null
+	);
+
+	
+Create Table Supplier(
+	supNum varchar (4) Not Null ,
+	invoiceNum varchar (4) Not Null,
+	restQuant int Not Null,
+	totalCost money Not Null,
+	delivery date  Not Null,
+	orderDelivered bit Not Null	
+	);
+
+Create Table Headquarters(
+	hqOrder varchar (50) Not Null,
+	branchNo varchar(5) Not Null,
+	invoiceNum varchar (4) Not Null,
+	totalCost money Not Null,
+	orderDelivered bit Not Null
+	);
+	Go
+	
+	
+	
+	//Create all the Primary keys. This is required for the 
+	//normalization of the database. Some of the tables require 
+	//the use of multiple attributes together as one primary key.
+	//This will hopefully reduce redundancy, and create a more 
+	//efficient database.
+	
+
+	Use Restaurant;
+
+	ALTER TABLE Employee
+	ADD CONSTRAINT PK_Employee PRIMARY KEY (employeeNo);
+	Go	
+
+	Use Restaurant;
+
+	ALTER TABLE Branch
+	ADD CONSTRAINT PK_Branch PRIMARY KEY (branchNo);
+	Go
+
+	Use Restaurant;
+
+	ALTER TABLE Customer
+	ADD CONSTRAINT PK_Customer PRIMARY KEY (paymentNo);
+	Go
+
+	Use Restaurant;
+
+	ALTER TABLE Food 
+	ADD CONSTRAINT PK_Food PRIMARY KEY (foodNo);
+	Go
+
+	Use Restaurant;
+
+	ALTER TABLE Ingredients
+	ADD CONSTRAINT PK_Ingredients PRIMARY KEY (ingredientNo);
+	Go
+
+	Use Restaurant;
+
+	ALTER TABLE Supplier
+	ADD CONSTRAINT PK_Supplier PRIMARY KEY (invoiceNo, restQuant, orderDelivered);
+	Go
+
+	Use Restaurant;
+
+	ALTER TABLE Headquarters
+	ADD CONSTRAINT PK_Headquarters PRIMARY KEY (hqOrder);
+	Go
+	
+	//Create all Foreign Keys required
+	
+	Use Restaurant;
+
+	Alter Table Employee
+	Add Constraint FK_Employee_Branch Foreign Key (branchNo)
+		References dbo.Branch (branchNo)
+		On Delete Cascade
+		On Update Cascade
+	;
+	
+	Alter Table Customer
+	Add Constraint FK_Customer_Food Foreign Key (foodNum)
+		References dbo.Food (foodNum)
+		On Delete Cascade
+		On Update Cascade
+	;
+	
+	Alter Table Food
+	Add Constraint FK_Food_Ingredients Foreign Key (ingredientNum)
+		References dbo.Ingredients (ingredientNum)
+		On Delete Cascade
+		On Update Cascade
+	;
+	
+		Alter Table Headquarters
+	Add Constraint FK_HeadQuarters_Supplier Foreign Key (invoiceNum)
+		References dbo.Supplier (invoiceNum)
+		On Delete Cascade
+		On Update Cascade
+	;
+	
+		Alter Table Headquarters
+	Add Constraint FK_HeadQuarters_Branch Foreign Key (branchNo)
+		References dbo.Branch (branchNo)
+		On Delete Cascade
+		On Update Cascade
+	;
+	
+	// For the values I just entered them in by hand, using the table view
+	// Did test something out though. If all the keys are connected, then
+	// the program throws out an error if I enter data into one table and 
+	// not the other. For example, since the Employee table and the Headquarters
+	// table is connected to branchNo in the Branch table, unless the Branch
+	// table data has been entered first the system will throw and error 
+	// when trying to enter data into the Employee and the Headquarters table.
+	// So, look through the relationships first before deciding in what order to
+	// to enter the data into the tables.
