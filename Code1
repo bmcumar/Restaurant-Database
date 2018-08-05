@@ -26,6 +26,7 @@ Create Table Employee (
 
 Create Table Branch (
 	branchNo varchar(5) Not Null,
+	address varchar(100) Not Null,
 	city varchar(100) Not Null,
 	state varchar(100) Not Null,
 	phoneNo char (10) Not Null,
@@ -129,7 +130,6 @@ Create Table Headquarters(
 	Go
 	
 	//Create all Foreign Keys required
-	
 	Use Restaurant;
 
 	Alter Table Employee
@@ -140,22 +140,22 @@ Create Table Headquarters(
 	;
 	
 	Alter Table Customer
-	Add Constraint FK_Customer_Food Foreign Key (foodNum)
-		References dbo.Food (foodNum)
+	Add Constraint FK_Customer_Food Foreign Key (foodNo)
+		References dbo.Food (foodNo)
 		On Delete Cascade
 		On Update Cascade
 	;
 	
 	Alter Table Food
-	Add Constraint FK_Food_Ingredients Foreign Key (ingredientNum)
-		References dbo.Ingredients (ingredientNum)
+	Add Constraint FK_Food_Ingredient Foreign Key (ingredientNo)
+		References dbo.Ingredients (ingredientNo)
 		On Delete Cascade
 		On Update Cascade
 	;
 	
 		Alter Table Headquarters
-	Add Constraint FK_HeadQuarters_Supplier Foreign Key (invoiceNum)
-		References dbo.Supplier (invoiceNum)
+	Add Constraint FK_HeadQuarters_Supplier Foreign Key (invoiceNo,	restQuant, orderDelivered)
+		References dbo.Supplier (invoiceNo,	restQuant, orderDelivered)
 		On Delete Cascade
 		On Update Cascade
 	;
@@ -166,7 +166,15 @@ Create Table Headquarters(
 		On Delete Cascade
 		On Update Cascade
 	;
-	
+
+	Alter Table Ingredient
+	Add Constraint FK_Ingredient_Supplier Foreign Key (invoiceNo,	restQuant, orderDelivered)
+		References dbo.Supplier (invoiceNo,	restQuant, orderDelivered)
+		On Delete Cascade
+		On Update Cascade
+	;
+	Go
+
 	// For the values I just entered them in by hand, using the table view
 	// Did test something out though. If all the keys are connected, then
 	// the program throws out an error if I enter data into one table and 
@@ -176,3 +184,62 @@ Create Table Headquarters(
 	// when trying to enter data into the Employee and the Headquarters table.
 	// So, look through the relationships first before deciding in what order to
 	// to enter the data into the tables.
+
+
+// Insert data into Branch table
+
+Use Restaurant;
+
+Insert Into Branch (branchNo, city, state, phoneNo, zipCode, address)
+	Values
+	('R001', 'Houston', 'TX', '2811234567','77058', '101 Rich Road'),
+	('R002', 'Austin', 'TX', '5124871239', '78069', '203 Hines Street')
+	;
+// Insert data into Employee
+
+Use Restaurant;
+
+Insert Into Employee (fName, lName, position, branchNo, salary, gender)
+	Values
+	('John', 'White', 'Server', 'R001','15000', 'M'),
+	('Ann', 'Beech', 'Server', 'R002', '15000', 'F'),
+	('David', 'Ford', 'Cook', 'R001', '15000', 'M'),
+	('Susan', 'Brand', 'Dish', 'R001', '12500', 'F'),
+	('Tony', 'Paul', 'Manager', 'R001', '30000', 'M'),
+	('Leslie', 'Price', 'Manager', 'R002', '30000', 'M')
+	;
+	
+// Insert data into Supplier
+e Restaurant;
+
+Insert Into Supplier(invoiceNo,restQuant,totalCost,delivery,orderDelivered)
+	Values
+
+	('S001', '100', '515', '20180506','1'),
+	('S002', '200', '600', '20180606', '0'),
+	('S003', '400', '400', '20180606', '0'),
+	('S004', '700', '850', '20180606', '0'),
+	('S005', '100', '350', '20180506', '1'),
+	('S006', '500', '650', '20180606', '0'),
+	('S007', '50', '150', '20180506', '1'),
+	('S008', '100', '300', '20180606', '0')
+	;
+	
+	//Insert into Ingredients
+	
+	Use Restaurant;
+
+Insert Into Ingredients(ingredientNo,ingredientName,restQuant,invoiceNo, orderDelivered)
+
+Values
+	('N001', 'Bun', '100','S001','1'),
+	('N002', 'Beef Patty', '200','S002','0'),
+	('N003', 'Lettuce','400','S003','0'),
+	('N004','Tomato', '700','S004','0'),
+	('N005', 'Onion', '100','S005','1'),
+	('N006', 'Chicken Patty', '500','S006', '0'),
+	('N007', 'Cheese', '50','S007', '1'),
+	('N008', 'Soda', '100', 'S008','0')
+	;
+
+
